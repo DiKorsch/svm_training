@@ -5,6 +5,6 @@ source 00_config.sh
 $PYTHON $SCRIPT \
 	${DATA} \
 	${DATASET} \
-	${DATASET}_${PARTS} \
+	${PARTS} \
 	${OPTS} \
 	$@
