@@ -5,20 +5,15 @@ import logging
 from svm_training.utils import parser, visualization
 from svm_training.core import Trainer
 
-from cvdatasets.annotations import AnnotationType
+from cvdatasets import AnnotationType
 
 
 def main(args):
 
-	KEY = "{}.{}".format(args.parts, args.model_type)
-	logging.info("===== Setup key: {} =====".format(KEY))
+	KEY = f"{args.dataset}_{args.parts}.{args.feature_model}"
+	logging.info(f"===== Setup key: {KEY} =====".format())
 
-	annot_cls = AnnotationType.get(args.dataset).value
-
-	annot = annot_cls(
-		root_or_infofile=args.data,
-		parts=args.parts,
-		feature_model=args.model_type)
+	annot = AnnotationType.new_annotation(args, load_strict=False)
 
 	train, val = map(annot.new_dataset, ["train", "test"])
 	logging.info("Loaded {} train and {} test images".format(len(train), len(val)))

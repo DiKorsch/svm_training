@@ -45,9 +45,8 @@ class ClfInitializer(object):
 
 	def dump(self, clf, output, key, suffix):
 
-		fpath = join(output, "clf_{}_{}_{}.npz".format(self.name, key, suffix))
-		logging.info("Dumping {} classifier to \"{}\"".format(
-			clf.__class__.__name__, fpath))
+		fpath = join(output, f"clf_{self.name}_{key}_{suffix}.npz")
+		logging.info(f"Dumping {clf.__class__.__name__} classifier to \"{fpath}\"")
 
 		return joblib.dump(clf, fpath)
 

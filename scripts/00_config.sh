@@ -23,4 +23,4 @@ PARTS=${PARTS:-"GLOBAL"}
 SVM_OUTPUT=${SVM_OUTPUT:-"../../.out"}
 
 OPTS="${OPTS} --output ${SVM_OUTPUT}"
-OPTS="${OPTS} --model_type ${MODEL_TYPE}"
+OPTS="${OPTS} --feature_model ${MODEL_TYPE}"

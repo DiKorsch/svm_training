@@ -3,21 +3,22 @@ from chainer_addons.models import PrepareType
 from cvargparse import BaseParser, Arg
 
 from cvdatasets.utils import read_info_file
+from cvfinetune.parser import add_dataset_args
+from cvfinetune.parser import add_model_args
 
-import os
-DEFAULT_INFO_FILE=os.environ.get("DATA", "/home/korsch/Data/info.yml")
+def _base_parser():
+	parser = BaseParser()
 
-info_file = read_info_file(DEFAULT_INFO_FILE)
+	add_dataset_args(parser)
+	# add_model_args(parser)
+	return parser
 
 def train_args():
-	parser = BaseParser([
-		Arg("data", default=DEFAULT_INFO_FILE),
+	parser = _base_parser()
 
-		Arg("dataset", choices=info_file.DATASETS.keys()),
-		Arg("parts", choices=info_file.PARTS.keys()),
-
-		Arg("--model_type", "-mt",
-			default="resnet", choices=info_file.MODELS.keys(),
+	parser.add_args([
+		Arg("--feature_model",
+			default="resnet", choices=["inception", "resnet"],
 			help="type of the model"),
 
 		Arg("--classifier", "-clf", default="svm",
@@ -47,23 +48,19 @@ def train_args():
 
 		Arg("--output", default=".out"),
 
-	])
-
-	parser.init_logger()
+	], group_name="SVM options")
 
 	return parser.parse_args()
 
 
 def predict_args():
-	parser = BaseParser([
-		Arg("data", default=DEFAULT_INFO_FILE),
+	parser = _base_parser()
 
-		Arg("dataset", choices=info_file.DATASETS.keys()),
-		Arg("parts", choices=info_file.PARTS.keys()),
+	parser.add_args([
 		Arg("weights"),
 
-		Arg("--model_type", "-mt",
-			default="resnet", choices=info_file.MODELS.keys(),
+		Arg("--feature_model",
+			default="resnet", choices=["inception", "resnet"],
 			help="type of the model"),
 
 		Arg("--subset", choices=[
@@ -79,8 +76,6 @@ def predict_args():
 
 		Arg("--output", default="predictions.csv"),
 
-	])
-
-	parser.init_logger()
+	], group_name="Prediction options")
 
 	return parser.parse_args()
